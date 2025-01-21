@@ -1,4 +1,4 @@
-let container = document.querySelector('.container');
+let container = document.querySelector(".container");
 let gridButton = document.getElementById("submit-grid");
 let clearGridButton = document.getElementById("clear-grid");
 let gridWidth = document.getElementById("width-range");
@@ -17,12 +17,13 @@ let events = {
     },
     touch: {
         down: "touchstart",
-        move: "touchmove",
-        up: "touchend"
+        mobe: "touchmove",
+        up: "touchend",
     },
 };
 
 let deviceType = "";
+
 let draw = false;
 let erase = false;
 
@@ -31,8 +32,7 @@ const isTouchDevice = () => {
         document.createEvent("TouchEvent");
         deviceType = "touch";
         return true;
-    }
-    catch (e) {
+    } catch (e) {
         deviceType = "mouse";
         return false;
     }
@@ -57,16 +57,15 @@ gridButton.addEventListener("click", () => {
                 draw = true;
                 if (erase) {
                     col.style.backgroundColor = "transparent";
-                }
-                else {
+                } else {
                     col.style.backgroundColor = colorButton.value;
                 }
             });
 
             col.addEventListener(events[deviceType].move, (e) => {
                 let elementId = document.elementFromPoint(
-                    !isTouchDevice ? e.clientX : e.touches[0].clientX,
-                    !isTouchDevice ? e.clientY : e.touches[0].clientY,
+                    !isTouchDevice() ? e.clientX : e.touches[0].clientX,
+                    !isTouchDevice() ? e.clientY : e.touches[0].clientY,
                 ).id;
                 checker(elementId);
             });
@@ -80,17 +79,17 @@ gridButton.addEventListener("click", () => {
         }
 
         container.appendChild(div);
+
     }
 });
 
 function checker(elementId) {
-    let gridColumn = document.querySelectorAll(".gridCol");
-    gridColumn.forEach((element) => {
+    let gridColumns = document.querySelectorAll(".gridCol");
+    gridColumns.forEach((element) => {
         if (elementId == element.id) {
             if (draw && !erase) {
                 element.style.backgroundColor = colorButton.value;
-            }
-            else if (draw && erase) {
+            } else if (draw && erase) {
                 element.style.backgroundColor = "transparent";
             }
         }
